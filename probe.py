@@ -5,8 +5,8 @@ import requests
 from ping3 import ping
 
 # Environment vars (set these in Railway)
-SUPABASE_URL = os.getenv("https://ppfpmnvqxqaowmvrjzlk.supabase.co")            # e.g. https://xxxx.supabase.co
-SUPABASE_SERVICE_KEY = os.getenv("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwZnBtbnZxeHFhb3dtdnJqemxrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1OTMxNjIzOCwiZXhwIjoyMDc0ODkyMjM4fQ.9-l7xVBnU_4cb-or4498FdIRbXdiZ4pb3fcvkM6NAT0")  # service_role key (server-only)
+SUPABASE_URL = os.getenv("SUPABASE_URL")            # e.g. https://xxxx.supabase.co
+SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY")  # service_role key (server-only)
 # Table name
 TABLE = "probes"
 
