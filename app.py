@@ -60,6 +60,9 @@ async def run_probe(request: Request, background_tasks: BackgroundTasks, host: s
     check_api_key(request)
     background_tasks.add_task(background_probe_task, host)
     return JSONResponse({"status": "started", "host": host})
+@app.get("/ping")
+async def ping():
+    return {"status": "ok"}
 
 @app.get("/data")
 async def get_data(limit: int = 50):
