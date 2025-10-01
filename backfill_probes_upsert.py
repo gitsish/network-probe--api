@@ -10,7 +10,7 @@ SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY")
 CSV_PATH = "data/probes.csv"   # adjust if your CSV path differs
 TABLE = "probes"
-CHUNK_SIZE = 100
+CHUNK_SIZE = 1
 
 if not SUPABASE_URL or not SUPABASE_SERVICE_KEY:
     raise SystemExit("Set SUPABASE_URL and SUPABASE_SERVICE_KEY in env")
@@ -55,11 +55,21 @@ def insert_chunk(rows):
         "apikey": SUPABASE_SERVICE_KEY,
         "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
         "Content-Type": "application/json",
-        "Prefer": "resolution=merge-duplicates"  # upsert/merge duplicates
+        "Prefer": "resolution=merge-duplicates"
     }
-    resp = requests.post(url, headers=headers, json=rows, timeout=60)
-    resp.raise_for_status()
-    return resp
+    try:
+        resp = requests.post(url, headers=headers, json=rows, timeout=60)
+        if resp.status_code >= 400:
+            print("=== Failed chunk payload (first row) ===")
+            print(rows[0])
+            print("=== Response status ===", resp.status_code)
+            print("=== Response body ===")
+            print(resp.text)
+            resp.raise_for_status()
+        return resp
+    except requests.RequestException as e:
+        print("RequestException while inserting chunk:", str(e))
+        raise
 
 def backfill(path):
     rows = []
