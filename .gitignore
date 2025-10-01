@@ -22,3 +22,7 @@ env/
 Thumbs.db
 .vscode/
 .idea/
+# Logs and outputs
+*.log
+*.out
+backfill_output.txt
