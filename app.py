@@ -63,6 +63,12 @@ async def run_probe(request: Request, background_tasks: BackgroundTasks, host: s
 async def ping():
     return {"status": "ok"}
 
+# safe GET /run (reuses same auth and background logic)
+@app.get("/run")
+async def run_probe_get(request: Request, background_tasks: BackgroundTasks, host: str = "1.1.1.1"):
+    check_api_key(request)
+    background_tasks.add_task(background_probe_task, host)
+    return JSONResponse({"status": "started", "method": "get", "host": host})
 @app.get("/data")
 async def get_data(limit: int = 50):
     try:
