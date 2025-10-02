@@ -18,16 +18,6 @@ if not SUPABASE_URL or not SUPABASE_SERVICE_KEY:
 
 app = FastAPI(title="Probe API")
 # Safe GET /run that reuses same behavior + auth
-@app.get("/run")
-async def run_probe_get(request: Request, background_tasks: BackgroundTasks, host: str = "1.1.1.1"):
-    """
-    Convenience GET endpoint (e.g., browser-friendly) that behaves like POST.
-    Still protected by RUN_API_KEY.
-    """
-    check_api_key(request)
-    background_tasks.add_task(background_probe_task, host)
-    return JSONResponse({"status": "started", "host": host})
-# For testing you can use "*" then lock down to your Streamlit origin later
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
